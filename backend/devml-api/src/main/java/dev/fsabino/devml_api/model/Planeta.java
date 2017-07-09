@@ -20,6 +20,13 @@ public class Planeta {
 		this.nombre = nombre;
 		this.punto = punto;
 	}
+	
+	public Planeta(int distancia, int velocidad, String nombre) {
+		super();
+		this.distancia = distancia;
+		this.velocidad = velocidad;
+		this.nombre = nombre;
+	}
 
 	public Planeta() {
 		super();

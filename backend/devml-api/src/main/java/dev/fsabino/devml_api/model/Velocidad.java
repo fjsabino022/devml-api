@@ -8,7 +8,8 @@ public enum Velocidad {
 	
 	V_1(1), 
 	V_3(3),
-	V_5(5); 
+	V_5(5), 
+	V_0(0);
 	
 	private int velocidad;
 

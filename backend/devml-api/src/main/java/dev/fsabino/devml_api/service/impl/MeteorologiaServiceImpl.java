@@ -1,12 +1,14 @@
 package dev.fsabino.devml_api.service.impl;
 
-import java.awt.geom.Point2D;
-
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import dev.fsabino.devml_api.model.Distancia;
-import dev.fsabino.devml_api.model.Velocidad;
+import dev.fsabino.devml_api.model.Betasoide;
+import dev.fsabino.devml_api.model.Ferengi;
+import dev.fsabino.devml_api.model.Sol;
+import dev.fsabino.devml_api.model.Vulcano;
 import dev.fsabino.devml_api.service.MeteorologiaService;
 import dev.fsabino.devml_api.util.Geometria;
 
@@ -15,11 +17,21 @@ public class MeteorologiaServiceImpl implements MeteorologiaService{
 
 	final static Logger logger = Logger.getLogger(MeteorologiaServiceImpl.class);
 	
-	/*Distancia de los planetas respecto al sol*/
-	public Point2D vectorP1 = new Point2D.Double();
-	public Point2D vectorP2 = new Point2D.Double();
-	public Point2D vectorP3 = new Point2D.Double();
-	public Point2D vectorSol = new Point2D.Double(0,0);
+	@Autowired
+	@Qualifier("ferengi")
+	Ferengi ferengi;
+	
+	@Autowired
+	@Qualifier("betasoide")
+	Betasoide betasoide;
+
+	@Autowired
+	@Qualifier("vulcano")
+	Vulcano vulcano;
+	
+	@Autowired
+	@Qualifier("sol")
+	Sol sol;
 	
 	public String calcular() throws Exception{
 		
@@ -42,21 +54,19 @@ public class MeteorologiaServiceImpl implements MeteorologiaService{
 			for (int i = 1; i < 3650; i++) {
 				
 				logger.debug("Dia: "+ i);
+			
+				ferengi.setPunto(Geometria.getInstance().getPuntoEjeCartesiano(ferengi.getDistancia(), i *ferengi.getVelocidad()));
+				betasoide.setPunto(Geometria.getInstance().getPuntoEjeCartesiano(betasoide.getDistancia(), i * betasoide.getVelocidad()));
+				vulcano.setPunto(Geometria.getInstance().getPuntoEjeCartesiano(vulcano.getDistancia(), i * vulcano.getVelocidad()));
 				
-				vectorP1 = Geometria.getInstance().getPuntoEjeCartesiano(Distancia.D_500.getDistancia(), getMovimientoDiario(i, -Velocidad.V_1.getVelocidad()));
-				vectorP2 = Geometria.getInstance().getPuntoEjeCartesiano(Distancia.D_2000.getDistancia(), getMovimientoDiario(i, -Velocidad.V_3.getVelocidad()));
-				vectorP3 = Geometria.getInstance().getPuntoEjeCartesiano(Distancia.D_1000.getDistancia(), getMovimientoDiario(i, Velocidad.V_5.getVelocidad()));
-				
-				logger.debug("P1x: "+ vectorP1.getX() + " P1y: "+ vectorP1.getY() );
-				logger.debug("P2x: "+ vectorP2.getX() + " P2y: "+ vectorP2.getY() );
-				logger.debug("P3x: "+ vectorP3.getX() + " P3y: "+ vectorP3.getY() );
+				logger.debug("P1x: "+ ferengi.getPunto().getX() + " P1y: "+ ferengi.getPunto().getY() );
+				logger.debug("P2x: "+ betasoide.getPunto().getX() + " P2y: "+ betasoide.getPunto().getY() );
+				logger.debug("P3x: "+ vulcano.getPunto().getX() + " P3y: "+ vulcano.getPunto().getY() );
 			
 				/*Debemos calculas las pendientes de los puntos para saber si estan alineados*/
-				double pendienteferevulca = Geometria.getInstance().getPendiente(vectorP1, vectorP3);
-				double pendientevulcabeta = Geometria.getInstance().getPendiente(vectorP3, vectorP2);
-				
-				//double pendientefvfijada = Math.round(pendienteferevulca * 10.0) / 10.0;
-				//double pendientevbfijada = Math.round(pendientevulcabeta * 10.0) / 10.0;
+				double pendienteferevulca = Geometria.getInstance().getPendiente(ferengi.getPunto(), vulcano.getPunto());
+				double pendientevulcabeta = Geometria.getInstance().getPendiente(vulcano.getPunto(), betasoide.getPunto());
+
 				
 				double pendientefvfijada = Geometria.getInstance().fijarNumero(pendienteferevulca,1);
 				double pendientevbfijada = Geometria.getInstance().fijarNumero(pendientevulcabeta,1);
@@ -69,7 +79,7 @@ public class MeteorologiaServiceImpl implements MeteorologiaService{
 				if (pendientefvfijada == pendientevbfijada){
 					
 					/*Vemos si el sol esta alineado tambien, con que no este con uno ya esta*/
-					double pendientesol = Geometria.getInstance().getPendiente(vectorSol, vectorP3);
+					double pendientesol = Geometria.getInstance().getPendiente(sol.getPunto(), vulcano.getPunto());
 					double pendientesolfijada = Geometria.getInstance().fijarNumero(pendientesol, 1);
 					
 					if (pendientesolfijada == pendientefvfijada){
@@ -84,19 +94,14 @@ public class MeteorologiaServiceImpl implements MeteorologiaService{
 					 *
 					 *Debemos ver si el sol esta dentro del triangulo
 					 */
-					if (Geometria.getInstance().isPuntoEnTriangulo(vectorSol, vectorP1, vectorP2, vectorP3)){
+					if (Geometria.getInstance().isPuntoEnTriangulo(sol.getPunto(), ferengi.getPunto(), betasoide.getPunto(), vulcano.getPunto())){
 						logger.debug("DENTRO: Punto dentro del triangulo" );
 						diassoldentrotriangulo++;
 						
-						/*Probamos la distancia calculada a mano*/
-						//double distanciap1p2_man = getDistancia(vectorP1, vectorP2); 
-						//double distanciap2p3_man = getDistancia(vectorP2, vectorP3);
-						//double distanciap3p1_man = getDistancia(vectorP3, vectorP1);
-						
 						/*Probamos el metodo de Point2*/
-						double distanciap1p2 = vectorP1.distance(vectorP2); 
-						double distanciap2p3 = vectorP2.distance(vectorP3); 
-						double distanciap3p1 = vectorP3.distance(vectorP1); 
+						double distanciap1p2 = ferengi.getPunto().distance(betasoide.getPunto()); 
+						double distanciap2p3 = betasoide.getPunto().distance(vulcano.getPunto()); 
+						double distanciap3p1 = vulcano.getPunto().distance(ferengi.getPunto()); 
 						
 						logger.debug("Distancia Automatica p1p2: "+ distanciap1p2);	
 						logger.debug("Distancia Automatica p2p3: "+ distanciap2p3);
@@ -146,9 +151,4 @@ public class MeteorologiaServiceImpl implements MeteorologiaService{
 		}
 
 	}
-
-	public int getMovimientoDiario(int dia, int velocidad){
-		return dia * velocidad;
-	}
-
 }

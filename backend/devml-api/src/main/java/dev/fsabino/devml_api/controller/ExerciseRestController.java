@@ -27,8 +27,6 @@ public class ExerciseRestController {
      public ResponseEntity<String> calcular3Ejercicios() {
 		try{
 			 return new ResponseEntity<String>(service.calcular(), HttpStatus.OK); 
-		}catch (ArithmeticException e) {
-			 return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}catch (Exception e) {
 			return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}

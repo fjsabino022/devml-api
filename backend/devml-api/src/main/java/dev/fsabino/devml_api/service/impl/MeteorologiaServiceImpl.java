@@ -1,6 +1,7 @@
 package dev.fsabino.devml_api.service.impl;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,7 @@ import dev.fsabino.devml_api.util.Geometria;
 @Service("meteorologiaServiceImpl")
 public class MeteorologiaServiceImpl implements MeteorologiaService{
 
-	final static Logger logger = Logger.getLogger(MeteorologiaServiceImpl.class);
+	final static Logger logger = LoggerFactory.getLogger(MeteorologiaServiceImpl.class);
 	
 	@Autowired
 	@Qualifier("ferengi")
@@ -125,12 +126,12 @@ public class MeteorologiaServiceImpl implements MeteorologiaService{
 			
 			StringBuilder sb =  new StringBuilder();
 			
-			sb.append("Cantidad de dias alineados con sol: "+ diasalineadosconsol );sb.append("\r");
-			sb.append("Cantidad de dias alineados sin sol: "+ diasalineadossinsol );sb.append("\r");
-			sb.append("Cantidad de dias sol dentro del triangulo: "+ diassoldentrotriangulo );sb.append("\r");
-			sb.append("Cantidad de dias sol fuera del triangulo: "+ diassolfueratriangulo );sb.append("\r");
-			sb.append("Maximo perimetro de tringulo: "+ maxperimetro );sb.append("\r");
-			sb.append("Maximo dia: "+ maxdia );
+			sb.append("1- Cantidad de dias SEQUIA (planetas alineados con sol): "+ diasalineadosconsol );sb.append("\r");
+			sb.append("2- Cantidad de dias LLUVIA (sol dentro del triangulo): "+ diassoldentrotriangulo );sb.append("\r");
+			sb.append("2- Maximo dia de LLUVIA: "+ maxdia + " perímetro: "+ maxperimetro );sb.append("\r");
+			sb.append("3- Cantidad de dias CONDICIONES OPTIMAS (planetas alineados sin sol): "+ diasalineadossinsol );sb.append("\r");
+			sb.append("Cantidad de dias CLIMA INDEFINIDO (sol fuera del triangulo): "+ diassolfueratriangulo );sb.append("\r");
+			
 
 			logger.debug("salida a funcion calcular()");
 			

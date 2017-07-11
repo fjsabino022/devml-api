@@ -1,5 +1,8 @@
 package dev.fsabino.devml_api.service.impl;
 
+import java.util.Map;
+import java.util.TreeMap;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import dev.fsabino.devml_api.model.Betasoide;
+import dev.fsabino.devml_api.model.Clima;
 import dev.fsabino.devml_api.model.Ferengi;
 import dev.fsabino.devml_api.model.Sol;
 import dev.fsabino.devml_api.model.Vulcano;
@@ -34,7 +38,12 @@ public class MeteorologiaServiceImpl implements MeteorologiaService{
 	@Qualifier("sol")
 	Sol sol;
 	
-	public String calcular() throws Exception{
+	/**
+	 * Metodo que permite obtener el string para los puntos 1,2 y 3 del enunciado.
+	 * @return String
+	 * @author francosabino
+	 * */
+	public String enunciado123() throws Exception{
 		
 		logger.debug("ingreso a funcion calcular()");
 		
@@ -52,7 +61,7 @@ public class MeteorologiaServiceImpl implements MeteorologiaService{
 			 * 
 			 * 72 dias * 10 = 720 dias
 			 * */
-			for (int i = 1; i < 3650; i++) {
+			for (int i = 1; i <= 3650; i++) {
 				
 				logger.debug("Dia: "+ i);
 			
@@ -67,10 +76,10 @@ public class MeteorologiaServiceImpl implements MeteorologiaService{
 				/*Debemos calculas las pendientes de los puntos para saber si estan alineados*/
 				double pendienteferevulca = Geometria.getInstance().getPendiente(ferengi.getPunto(), vulcano.getPunto());
 				double pendientevulcabeta = Geometria.getInstance().getPendiente(vulcano.getPunto(), betasoide.getPunto());
-
 				
-				double pendientefvfijada = Geometria.getInstance().fijarNumero(pendienteferevulca,1);
-				double pendientevbfijada = Geometria.getInstance().fijarNumero(pendientevulcabeta,1);
+				/*Redondeamos las pendientes*/
+				double pendientefvfijada = Geometria.getInstance().fijarNumero(pendienteferevulca,Geometria.cantdecimales);
+				double pendientevbfijada = Geometria.getInstance().fijarNumero(pendientevulcabeta,Geometria.cantdecimales);
 				
 				logger.debug("Pendiente FERENGIS - VULCANO" + pendienteferevulca);
 				logger.debug("Pendiente VULCANO - BETASOIDES" + pendientevulcabeta);
@@ -81,7 +90,7 @@ public class MeteorologiaServiceImpl implements MeteorologiaService{
 					
 					/*Vemos si el sol esta alineado tambien, con que no este con uno ya esta*/
 					double pendientesol = Geometria.getInstance().getPendiente(sol.getPunto(), vulcano.getPunto());
-					double pendientesolfijada = Geometria.getInstance().fijarNumero(pendientesol, 1);
+					double pendientesolfijada = Geometria.getInstance().fijarNumero(pendientesol, Geometria.cantdecimales);
 					
 					if (pendientesolfijada == pendientefvfijada){
 						diasalineadosconsol++;	
@@ -150,6 +159,67 @@ public class MeteorologiaServiceImpl implements MeteorologiaService{
 			logger.error("ERROR: Exception");
 			throw e;
 		}
+	}
+	
+	private String getClimaByDia(int dia) throws Exception{
+		
+		try{
+			
+			ferengi.setPunto(Geometria.getInstance().getPuntoEjeCartesiano(ferengi.getDistancia(), dia *ferengi.getVelocidad()));
+			betasoide.setPunto(Geometria.getInstance().getPuntoEjeCartesiano(betasoide.getDistancia(), dia * betasoide.getVelocidad()));
+			vulcano.setPunto(Geometria.getInstance().getPuntoEjeCartesiano(vulcano.getDistancia(), dia * vulcano.getVelocidad()));
+			
+			/*Debemos calculas las pendientes de los puntos para saber si estan alineados*/
+			double pendienteferevulca = Geometria.getInstance().getPendiente(ferengi.getPunto(), vulcano.getPunto());
+			double pendientevulcabeta = Geometria.getInstance().getPendiente(vulcano.getPunto(), betasoide.getPunto());
+			
+			/*Redondeamos las pendientes*/
+			double pendientefvfijada = Geometria.getInstance().fijarNumero(pendienteferevulca,Geometria.cantdecimales);
+			double pendientevbfijada = Geometria.getInstance().fijarNumero(pendientevulcabeta,Geometria.cantdecimales);
+			
+			if (pendientefvfijada == pendientevbfijada){
+				
+				double pendientesol = Geometria.getInstance().getPendiente(sol.getPunto(), vulcano.getPunto());
+				double pendientesolfijada = Geometria.getInstance().fijarNumero(pendientesol, Geometria.cantdecimales);
+				
+				if (pendientesolfijada == pendientefvfijada){
+					return Clima.SEQUIA.getClima();
+				}else{
+					return Clima.OPTIMO.getClima();
+				}
+			}else{
+				
+				if (Geometria.getInstance().isPuntoEnTriangulo(sol.getPunto(), ferengi.getPunto(), betasoide.getPunto(), vulcano.getPunto())){
+					return Clima.LUVIA.getClima();
+				}else{
+					return Clima.INDEFINIDO.getClima();
+				}
+			}
+		}catch (ArithmeticException e) {
+			e.printStackTrace();
+			logger.error("ERROR: ArithmeticException");
+			throw e;
+		}catch (NullPointerException e) {
+			e.printStackTrace();
+			logger.error("ERROR: NullPointerException");
+			throw e;
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error("ERROR: Exception");
+			throw e;
+		}
+		
+		
+	}
 
+	public Map<Integer, String> getPronosticoExtendido(int dias) throws Exception {
+		Map<Integer, String> map = new TreeMap<Integer, String>();
+		
+		for (int i = 1; i <= dias; i++) {
+			String clima = getClimaByDia(i);
+			map.put(i, clima);
+		}
+		
+		return map;
 	}
 }

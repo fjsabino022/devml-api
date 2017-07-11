@@ -10,6 +10,7 @@ import java.awt.geom.Point2D;
 public class Geometria {
 
 	private static Geometria geometria = null;
+	public static final int cantdecimales = 1;
 	
 	private Geometria(){
 		

@@ -21,7 +21,7 @@ public class ClimaRestController {
 	@Autowired
 	@Qualifier("meteorologiaServiceImpl")
 	private MeteorologiaService service;
-
+	
 	@GetMapping("/ping")
 	public ResponseEntity<String> ping() {
 		return new ResponseEntity<String>("pong..", HttpStatus.OK);
@@ -54,6 +54,4 @@ public class ClimaRestController {
 			return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
     }
-	
-
 }

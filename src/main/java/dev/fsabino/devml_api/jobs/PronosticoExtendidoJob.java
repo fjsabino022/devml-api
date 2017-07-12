@@ -1,12 +1,8 @@
 package dev.fsabino.devml_api.jobs;
 
-import java.util.Set;
-
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
-
-import dev.fsabino.devml_api.repository.JedisRepository;
 
 @Component
 public class PronosticoExtendidoJob implements ApplicationListener<ApplicationReadyEvent>{
@@ -18,10 +14,10 @@ public class PronosticoExtendidoJob implements ApplicationListener<ApplicationRe
 	  @Override
 	  public void onApplicationEvent(final ApplicationReadyEvent event) {
 	 
-		  Set<String> keys = JedisRepository.getInstance().keys("*");
-		  for (String key : keys) {
-			  JedisRepository.getInstance().del(key);
-		  } 		  
+		  //Set<String> keys = JedisRepository.getInstance().keys("*");
+		  //for (String key : keys) {
+		  //	  JedisRepository.getInstance().del(key);
+		  //} 		  
 		  //JedisRepository.getInstance().set("agus", "agus");
 	    return;
 	  }

@@ -1,8 +1,5 @@
 package dev.fsabino.devml_api.service.impl;
 
-import java.util.Map;
-import java.util.TreeMap;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +10,9 @@ import dev.fsabino.devml_api.model.Betasoide;
 import dev.fsabino.devml_api.model.Clima;
 import dev.fsabino.devml_api.model.Ferengi;
 import dev.fsabino.devml_api.model.Sol;
+import dev.fsabino.devml_api.model.TipoClima;
 import dev.fsabino.devml_api.model.Vulcano;
+import dev.fsabino.devml_api.repository.ClimaRepository;
 import dev.fsabino.devml_api.service.MeteorologiaService;
 import dev.fsabino.devml_api.util.Geometria;
 
@@ -37,6 +36,9 @@ public class MeteorologiaServiceImpl implements MeteorologiaService{
 	@Autowired
 	@Qualifier("sol")
 	Sol sol;
+	
+	@Autowired
+	ClimaRepository climarepository;
 	
 	/**
 	 * Metodo que permite obtener el string para los puntos 1,2 y 3 del enunciado.
@@ -161,7 +163,7 @@ public class MeteorologiaServiceImpl implements MeteorologiaService{
 		}
 	}
 	
-	private String getClimaByDia(int dia) throws Exception{
+	private TipoClima getTipoClimaByDia(int dia) throws Exception{
 		
 		try{
 			
@@ -183,16 +185,16 @@ public class MeteorologiaServiceImpl implements MeteorologiaService{
 				double pendientesolfijada = Geometria.getInstance().fijarNumero(pendientesol, Geometria.cantdecimales);
 				
 				if (pendientesolfijada == pendientefvfijada){
-					return Clima.SEQUIA.getClima();
+					return TipoClima.SEQUIA;
 				}else{
-					return Clima.OPTIMO.getClima();
+					return TipoClima.OPTIMO;
 				}
 			}else{
 				
 				if (Geometria.getInstance().isPuntoEnTriangulo(sol.getPunto(), ferengi.getPunto(), betasoide.getPunto(), vulcano.getPunto())){
-					return Clima.LUVIA.getClima();
+					return TipoClima.LLUVIA;
 				}else{
-					return Clima.INDEFINIDO.getClima();
+					return TipoClima.INDEFINIDO;
 				}
 			}
 		}catch (ArithmeticException e) {
@@ -212,14 +214,27 @@ public class MeteorologiaServiceImpl implements MeteorologiaService{
 		
 	}
 
-	public Map<Integer, String> getPronosticoExtendido(int dias) throws Exception {
-		Map<Integer, String> map = new TreeMap<Integer, String>();
+	public Clima getPronosticoExtendido(Integer dia) throws Exception {
 		
-		for (int i = 1; i <= dias; i++) {
-			String clima = getClimaByDia(i);
-			map.put(i, clima);
+		//for (int i = 1; i <= dias; i++) {
+			
+		//}
+		return null;
+		
+	}
+
+	@Override
+	public Clima getClimaByDia(Integer dia) throws Exception {
+		
+		Clima clima = null; 
+		
+		clima = climarepository.findClimaByDia(dia);
+		
+		if ( clima == null){
+			climarepository.saveClima(new Clima(dia,getTipoClimaByDia(dia)));
+			clima = climarepository.findClimaByDia(dia);
 		}
 		
-		return map;
+		return clima;
 	}
 }

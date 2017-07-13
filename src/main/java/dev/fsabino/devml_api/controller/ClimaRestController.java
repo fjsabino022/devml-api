@@ -1,17 +1,15 @@
 package dev.fsabino.devml_api.controller;
 
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import dev.fsabino.devml_api.model.Clima;
 import dev.fsabino.devml_api.service.MeteorologiaService;
 
 @RestController
@@ -36,22 +34,13 @@ public class ClimaRestController {
 		}
      }
 	
-	@GetMapping("/extendido/{dias}")
-	public ResponseEntity<Map<Integer, String>> getEventList(@PathVariable("dias") int dias) {
+	@GetMapping("/clima")
+    public ResponseEntity<Clima> getClimabyDia(@RequestParam(required = true, value = "dia") Integer dia) {
 		try{
-			Map<Integer, String> eventList = service.getPronosticoExtendido(dias);
-			return new ResponseEntity<Map<Integer, String>>(eventList, HttpStatus.OK);
+			Clima eventList = service.getClimaByDia(dia);
+			return new ResponseEntity<Clima>(eventList, HttpStatus.OK);
 		}catch (Exception e) {
-			return new ResponseEntity<Map<Integer, String>>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<Clima>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
-	@GetMapping("/clima")
-    public ResponseEntity<String> getClimaDia(@RequestParam(required = true, value = "dia") int dia) {
-		try{
-			 return new ResponseEntity<String>("boludin", HttpStatus.OK); 
-		}catch (Exception e) {
-			return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-    }
 }

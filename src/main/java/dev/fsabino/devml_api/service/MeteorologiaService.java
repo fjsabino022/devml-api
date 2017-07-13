@@ -1,9 +1,10 @@
 package dev.fsabino.devml_api.service;
 
-import java.util.Map;
+import dev.fsabino.devml_api.model.Clima;
 
 public interface MeteorologiaService {
 
 	public String enunciado123() throws ArithmeticException, Exception;
-	public Map<Integer, String> getPronosticoExtendido (int dias) throws Exception;
+	public Clima getPronosticoExtendido (Integer dia) throws Exception;
+	public Clima getClimaByDia(Integer dia) throws Exception;
 }

@@ -1,24 +1,41 @@
 package dev.fsabino.devml_api.model;
 
+import org.springframework.stereotype.Component;
+
 /**
- * Enumeracion que guarda las clasificaciones de los tipos de clima.
+ * Clase model del clima
  *
  * @author francosabino
  * */
-public enum Clima {
-	
-	LUVIA("luvia"), 
-	SEQUIA("sequia"),
-	INDEFINIDO("indefinido"), 
-	OPTIMO("optimo");
-	
-	private String clima;
+@Component("clima")
+public class Clima {
 
-	private Clima (String clima){
+	private Integer dia;
+	private TipoClima clima;
+	
+	public Clima(){
+		
+	}
+
+	public Clima(Integer id, TipoClima clima) {
+		super();
+		this.dia = id;
 		this.clima = clima;
 	}
 
-	public String getClima() {
+	public Integer getDia() {
+		return dia;
+	}
+
+	public void setDia(Integer dia) {
+		this.dia = dia;
+	}
+
+	public TipoClima getClima() {
 		return clima;
 	}
+
+	public void setClima(TipoClima clima) {
+		this.clima = clima;
+	}	
 }

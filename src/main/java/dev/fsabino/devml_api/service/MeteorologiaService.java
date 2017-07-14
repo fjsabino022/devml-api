@@ -5,6 +5,6 @@ import dev.fsabino.devml_api.model.Clima;
 public interface MeteorologiaService {
 
 	public String enunciado123() throws ArithmeticException, Exception;
-	public Clima getPronosticoExtendido (Integer dia) throws Exception;
+	public void calcularPronosticoExtendido (Integer dia) throws Exception;
 	public Clima getClimaByDia(Integer dia) throws Exception;
 }

@@ -17,8 +17,9 @@ public class ClimaRepositoryImpl implements ClimaRepository {
 	JedisRepository jedis;
 	
 	@Override
-	public void saveClima(Clima clima) {
+	public Clima saveClima(Clima clima) {
 		jedis.getInstance().set(clima.getDia().toString(), clima.getClima().getTipoclima());
+		return clima;
 	}
 
 	@Override

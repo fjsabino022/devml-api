@@ -38,6 +38,10 @@ public class MeteorologiaServiceImpl implements MeteorologiaService{
 	Sol sol;
 	
 	@Autowired
+	@Qualifier("clima")
+	Clima clima;
+	
+	@Autowired
 	ClimaRepository climarepository;
 	
 	/**
@@ -214,25 +218,20 @@ public class MeteorologiaServiceImpl implements MeteorologiaService{
 		
 	}
 
-	public Clima getPronosticoExtendido(Integer dia) throws Exception {
+	public void calcularPronosticoExtendido(Integer dia) throws Exception {
 		
-		//for (int i = 1; i <= dias; i++) {
-			
-		//}
-		return null;
-		
+		for (int i = 1; i <= 720; i++) {
+			getClimaByDia(i);
+		}
 	}
 
 	@Override
 	public Clima getClimaByDia(Integer dia) throws Exception {
 		
-		Clima clima = null; 
-		
 		clima = climarepository.findClimaByDia(dia);
 		
 		if ( clima == null){
-			climarepository.saveClima(new Clima(dia,getTipoClimaByDia(dia)));
-			clima = climarepository.findClimaByDia(dia);
+			clima = climarepository.saveClima(new Clima(dia,getTipoClimaByDia(dia)));
 		}
 		
 		return clima;

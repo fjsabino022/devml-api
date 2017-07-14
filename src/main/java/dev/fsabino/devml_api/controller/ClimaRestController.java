@@ -20,12 +20,17 @@ public class ClimaRestController {
 	@Qualifier("meteorologiaServiceImpl")
 	private MeteorologiaService service;
 	
+	@GetMapping("/")
+	public ResponseEntity<String> welcome() {
+		return new ResponseEntity<String>("Test Franco Sabino.", HttpStatus.OK);
+	}
+	
 	@GetMapping("/ping")
 	public ResponseEntity<String> ping() {
 		return new ResponseEntity<String>("pong..", HttpStatus.OK);
 	}
 
-	@GetMapping("/")
+	@GetMapping("/ejercicios")
      public ResponseEntity<String> calcular3Ejercicios() {
 		try{
 			 return new ResponseEntity<String>(service.enunciado123(), HttpStatus.OK); 

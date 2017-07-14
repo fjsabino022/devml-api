@@ -1,5 +1,7 @@
 package dev.fsabino.devml_api.repository.impl;
 
+import java.net.URISyntaxException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
@@ -22,19 +24,36 @@ public class ClimaRepositoryImpl implements ClimaRepository {
 	
 	@Override
 	public Clima saveClima(Clima clima) {
-		jedis.getInstance().set(clima.getDia().toString(), clima.getClima().getTipoclima());
+		
+		try {
+		
+			jedis.getInstance().set(clima.getDia().toString(), clima.getClima().getTipoclima());
+		
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return clima;
 	}
 
 	@Override
 	public Clima findClimaByDia(Integer dia) {
 		
-		String tipoclima = jedis.getInstance().get(dia.toString());
-		
-		if (tipoclima == "" || tipoclima == null){
+		String tipoclima;
+		try {
+			tipoclima = jedis.getInstance().get(dia.toString());
+			
+			if (tipoclima == "" || tipoclima == null){
+				return null;
+			}
+			
+			return new Clima(dia, TipoClima.devolveTipoClima(tipoclima));	
+			
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
 			return null;
 		}
-		
-		return new Clima(dia, TipoClima.devolveTipoClima(tipoclima));	
 	}
 }

@@ -9,6 +9,10 @@ import dev.fsabino.devml_api.model.Clima;
 import dev.fsabino.devml_api.model.TipoClima;
 import dev.fsabino.devml_api.repository.ClimaRepository;
 
+/**
+ * Interaccion con el repositorio de datos.
+ * @author francosabino 
+ */
 @Repository
 public class ClimaRepositoryImpl implements ClimaRepository {
 

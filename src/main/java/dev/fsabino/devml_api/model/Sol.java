@@ -4,6 +4,10 @@ import java.awt.geom.Point2D;
 
 import org.springframework.stereotype.Component;
 
+/**
+ * Planeta Sol.
+ * @author francosabino
+ * */
 @Component("sol")
 public class Sol extends Planeta {
 	public Sol(){

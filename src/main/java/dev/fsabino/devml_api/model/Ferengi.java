@@ -2,6 +2,11 @@ package dev.fsabino.devml_api.model;
 
 import org.springframework.stereotype.Component;
 
+
+/**
+ * Planeta Ferengi.
+ * @author francosabino
+ * */
 @Component("ferengi")
 public class Ferengi extends Planeta {
 	public Ferengi() {

@@ -12,6 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 import dev.fsabino.devml_api.model.Clima;
 import dev.fsabino.devml_api.service.MeteorologiaService;
 
+/**
+ * Clase restfull que es el punto de entrada de la aplicacion.
+ * @author francosabino
+ *
+ **/
 @RestController
 @RequestMapping("/")
 public class ClimaRestController {

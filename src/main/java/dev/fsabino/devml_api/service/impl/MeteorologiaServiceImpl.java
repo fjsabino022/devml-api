@@ -16,6 +16,10 @@ import dev.fsabino.devml_api.repository.ClimaRepository;
 import dev.fsabino.devml_api.service.MeteorologiaService;
 import dev.fsabino.devml_api.util.Geometria;
 
+/**
+ * Implementacion de metodos de la interfaz MeteorologiaService
+ * @author francosabino
+ * */
 @Service("meteorologiaServiceImpl")
 public class MeteorologiaServiceImpl implements MeteorologiaService{
 

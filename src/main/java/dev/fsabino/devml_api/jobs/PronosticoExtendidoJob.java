@@ -8,6 +8,11 @@ import org.springframework.stereotype.Component;
 
 import dev.fsabino.devml_api.service.MeteorologiaService;
 
+/**
+ * Clase que se ejecuta al inicial el servidor
+ * @author francosabino
+ *
+ **/
 @Component
 public class PronosticoExtendidoJob implements ApplicationListener<ApplicationReadyEvent> {
 

@@ -2,6 +2,10 @@ package dev.fsabino.devml_api.model;
 
 import org.springframework.stereotype.Component;
 
+/**
+ * Planeta Betasoide.
+ * @author francosabino
+ * */
 @Component("betasoide")
 public class Betasoide extends Planeta {
 	public Betasoide() {

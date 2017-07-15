@@ -22,28 +22,27 @@ public class JedisRepository {
 
 	}
 
-	public Jedis getInstance(){
-		
-		if (jedis==null){
-			
+	public Jedis getInstance() {
+
+		if (jedis == null) {
+
 			URI redisURI = null;
-			
+
 			try {
-			
-				//redisURI = new URI(System.getenv("REDIS_URL"));
-				jedis = new Jedis("localhost");
-				
-			//} catch (URISyntaxException e) {
-			//	e.printStackTrace();
-			//	return null;
+
+				redisURI = new URI(System.getenv("REDIS_URL"));
+				jedis = new Jedis(redisURI);
+
+			} catch (URISyntaxException e) {
+				e.printStackTrace();
+				return null;
 			} catch (Exception e) {
 				e.printStackTrace();
 				throw e;
 			}
-			
-			
+
 		}
-		
+
 		return jedis;
 	}
 }

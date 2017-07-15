@@ -3,10 +3,12 @@
 Test Franco Sabino.
 
 ## Tecnología Utilizada
-- Spring Boot
-- JUnit
-- RedisCache
-- Maven
+- Spring Boot 	1.5.4
+- JUnit 		4.12
+- RedisCache 	2.9.0
+- Maven			4.0.0
+
+Compilacion: devml-api-0.0.1-SNAPSHOT.jar
 
 ## Ingreso al sistema
 

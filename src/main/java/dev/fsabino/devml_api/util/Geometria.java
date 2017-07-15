@@ -132,7 +132,6 @@ public class Geometria {
         return resultado;
 	}
 	
-	@Deprecated
 	public double getDistancia(Point2D punto1, Point2D punto2){
 		double dist12x= Math.abs(punto1.getX()-punto2.getX());
 		double dist12y= Math.abs(punto1.getY()-punto2.getY());

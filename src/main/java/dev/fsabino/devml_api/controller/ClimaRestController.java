@@ -47,7 +47,7 @@ public class ClimaRestController {
 	@GetMapping("/clima")
     public ResponseEntity<Clima> getClimabyDia(@RequestParam(required = true, value = "dia") Integer dia) {
 		try{
-			if (dia!= null && dia >0){
+			if (dia!= null && dia >=0 && dia <= 720){
 				Clima clima = service.getClimaByDia(dia);
 				return new ResponseEntity<Clima>(clima, HttpStatus.OK);
 			}else{

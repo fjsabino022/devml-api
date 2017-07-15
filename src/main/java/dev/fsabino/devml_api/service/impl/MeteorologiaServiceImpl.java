@@ -264,7 +264,7 @@ public class MeteorologiaServiceImpl implements MeteorologiaService {
 	public void calcularPronosticoExtendido(Integer dia) throws Exception {
 
 		if (dia != null && dia > 0) {
-			for (int i = 1; i <= 720; i++) {
+			for (int i = 0; i <= 720; i++) {
 				getClimaByDia(i);
 			}
 		}

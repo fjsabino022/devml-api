@@ -195,7 +195,16 @@ public class MeteorologiaServiceImpl implements MeteorologiaService {
 		}
 	}
 
+	/**
+	 * Metodo que permite obtener el tipo de clima de un dia determinado
+	 * 
+	 * @param int
+	 * @return TipoClima tipoclima
+	 * @author francosabino
+	 */
 	private TipoClima getTipoClimaByDia(int dia) throws Exception {
+
+		logger.debug("ingreso a funcion getTipoClimaByDia()");
 
 		try {
 
@@ -242,7 +251,9 @@ public class MeteorologiaServiceImpl implements MeteorologiaService {
 						return TipoClima.INDEFINIDO;
 					}
 				}
-			}else{
+			} else {
+
+				logger.debug("salida de funcion getTipoClimaByDia() NULL");
 				return null;
 			}
 		} catch (ArithmeticException e) {
@@ -261,27 +272,44 @@ public class MeteorologiaServiceImpl implements MeteorologiaService {
 
 	}
 
+	/**
+	 * Metodo que permite obtener el tipo de clima de un dia determinado
+	 * 
+	 * @param Integer
+	 * @author francosabino
+	 */
 	public void calcularPronosticoExtendido(Integer dia) throws Exception {
 
+		logger.debug("ingreso a funcion calcularPronosticoExtendido()");
 		if (dia != null && dia > 0) {
 			for (int i = 0; i <= 720; i++) {
 				getClimaByDia(i);
 			}
 		}
+		logger.debug("salida de funcion calcularPronosticoExtendido()");
 	}
 
+	/**
+	 * Metodo que permite obtener el clima de un determinado dia
+	 * 
+	 * @param Integer
+	 * @return Clima clima
+	 * @author francosabino
+	 */
 	@Override
 	public Clima getClimaByDia(Integer dia) throws Exception {
 
+		logger.debug("ingreso a funcion getClimaByDia()");
 		if (dia != null && dia > 0) {
 			clima = climarepository.findClimaByDia(dia);
 
 			if (clima == null) {
 				clima = climarepository.saveClima(new Clima(dia, getTipoClimaByDia(dia)));
 			}
-
+			logger.debug("salida de funcion getClimaByDia()");
 			return clima;
 		} else {
+			logger.debug("salida de funcion getClimaByDia() NULL");
 			return null;
 		}
 	}

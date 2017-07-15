@@ -15,7 +15,7 @@ Test Franco Sabino.
 #### Para ejecutar los 3 primeros puntos se debe ingresar a la siguiente URL:
 
 ###### URL: https://devml-api.herokuapp.com/ejercicios
-Los calculos de las primeras tres consignas estan calculadas a 10 años del planeta tierra por lo tanto a 3650 dias. En el enunciado no se especificaba los años respecto a que planeta. Se tomó un solo decimal para que el calculo de la alineación de los planetas.
+Los resultados de las primeras tres consignas estan calculados a 10 años respectos del planeta tierra por lo tanto a 3650 dias. En el enunciado no se especificaba los años respecto a que planeta. Se tomó un solo decimal para que el calculo de la alineación de los planetas.
 
 #### Bonus:
 

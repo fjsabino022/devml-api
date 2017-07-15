@@ -47,8 +47,12 @@ public class ClimaRestController {
 	@GetMapping("/clima")
     public ResponseEntity<Clima> getClimabyDia(@RequestParam(required = true, value = "dia") Integer dia) {
 		try{
-			Clima eventList = service.getClimaByDia(dia);
-			return new ResponseEntity<Clima>(eventList, HttpStatus.OK);
+			if (dia!= null && dia >0){
+				Clima clima = service.getClimaByDia(dia);
+				return new ResponseEntity<Clima>(clima, HttpStatus.OK);
+			}else{
+				return new ResponseEntity<Clima>(HttpStatus.NOT_ACCEPTABLE);
+			}
 		}catch (Exception e) {
 			return new ResponseEntity<Clima>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}

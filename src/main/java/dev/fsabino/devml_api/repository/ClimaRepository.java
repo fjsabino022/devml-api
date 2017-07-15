@@ -8,6 +8,6 @@ import dev.fsabino.devml_api.model.Clima;
  */
 public interface ClimaRepository {
 
-	Clima saveClima(Clima clima);
-	Clima findClimaByDia(Integer id);
+	Clima saveClima(Clima clima) throws Exception;
+	Clima findClimaByDia(Integer id) throws Exception;
 }

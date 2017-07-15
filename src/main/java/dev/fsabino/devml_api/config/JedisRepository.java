@@ -22,11 +22,26 @@ public class JedisRepository {
 
 	}
 
-	public Jedis getInstance() throws URISyntaxException {
+	public Jedis getInstance(){
 		
 		if (jedis==null){
-			URI redisURI = new URI(System.getenv("REDIS_URL"));
-			jedis = new Jedis(redisURI);
+			
+			URI redisURI = null;
+			
+			try {
+			
+				//redisURI = new URI(System.getenv("REDIS_URL"));
+				jedis = new Jedis("localhost");
+				
+			//} catch (URISyntaxException e) {
+			//	e.printStackTrace();
+			//	return null;
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw e;
+			}
+			
+			
 		}
 		
 		return jedis;

@@ -75,7 +75,7 @@ public class MeteorologiaServiceImpl implements MeteorologiaService {
 			 * 
 			 * 72 dias * 10 = 720 dias
 			 */
-			for (int i = 1; i <= 3650; i++) {
+			for (int i = 0; i <= 3650; i++) {
 
 				logger.debug("Dia: " + i);
 
@@ -208,7 +208,7 @@ public class MeteorologiaServiceImpl implements MeteorologiaService {
 
 		try {
 
-			if (dia > 0) {
+			if (dia >= 0) {
 				ferengi.setPunto(Geometria.getInstance().getPuntoEjeCartesiano(ferengi.getDistancia(),
 						dia * ferengi.getVelocidad()));
 				betasoide.setPunto(Geometria.getInstance().getPuntoEjeCartesiano(betasoide.getDistancia(),
@@ -281,7 +281,7 @@ public class MeteorologiaServiceImpl implements MeteorologiaService {
 	public void calcularPronosticoExtendido(Integer dia) throws Exception {
 
 		logger.debug("ingreso a funcion calcularPronosticoExtendido()");
-		if (dia != null && dia > 0) {
+		if (dia != null && dia >= 0) {
 			for (int i = 0; i <= 720; i++) {
 				getClimaByDia(i);
 			}
@@ -300,15 +300,17 @@ public class MeteorologiaServiceImpl implements MeteorologiaService {
 	public Clima getClimaByDia(Integer dia) throws Exception {
 
 		logger.debug("ingreso a funcion getClimaByDia()");
-		if (dia != null && dia > 0) {
+		if (dia != null && dia >= 0) {
 			clima = climarepository.findClimaByDia(dia);
 
 			if (clima == null) {
 				clima = climarepository.saveClima(new Clima(dia, getTipoClimaByDia(dia)));
 			}
+
 			logger.debug("salida de funcion getClimaByDia()");
 			return clima;
 		} else {
+
 			logger.debug("salida de funcion getClimaByDia() NULL");
 			return null;
 		}
